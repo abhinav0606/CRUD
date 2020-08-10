@@ -4,7 +4,28 @@ from django.http import HttpResponse,request,HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from .models import details
 import time
-# Create your views here.
+
+from grpc_django.views import RetrieveGRPCView, ServerStreamGRPCView
+from grpc_codegen.user_pb2 import User as UserProto
+from django.contrib.auth.models import User
+from .serializers import UserSerializer
+
+class GetUser(RetrieveGRPCView):
+    """
+    RPC to view a single user by ID
+    """
+    queryset = User.objects.all()
+    response_proto = UserProto
+    serializer_class = UserSerializer
+
+
+class ListUsers(ServerStreamGRPCView):
+    """
+    RPC to list all users
+    """
+    queryset = User.objects.all()
+    response_proto = UserProto
+    serializer_class = UserSerializer
 @csrf_exempt
 def index(request):
     if request.method=='POST':
