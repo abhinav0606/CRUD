@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from grpc_django import GRPCSettings, GRPCService
 import grpc_django
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -38,7 +39,23 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'crud1.apps.Crud1Config',
+    'grpc_django',
 ]
+
+
+
+GRPC_SETTINGS = GRPCSettings(
+    services=[GRPCService(
+
+        name='UserService',
+
+        package_name='user',
+
+        proto_path='crud1/crud1.proto',
+
+        rpc_conf='crud1.rpc'
+    )]
+)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
